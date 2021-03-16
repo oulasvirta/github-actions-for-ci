@@ -1,13 +1,20 @@
-name: Node.js CI
+name: Node CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
   build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and build webpack
+        run: |
+          npm install
+          npm run build
+
+  test:
 
     runs-on: ubuntu-latest
 
@@ -22,5 +29,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run bu
+    - name: npm install, and test
+      run: |
+        npm install
+        npm test
+      env:
+        CI: true
